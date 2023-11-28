@@ -28,6 +28,11 @@ runs:
 
     - uses: mhitza/flake8-jupyter-notebook@v1
       id: flake8
+
+    - uses: jpetrucciani/black-check@master
+      id: black
+      with:
+        path: ${{ github.head_ref }}
     
     - uses: yaananth/run-notebook@v2
       id: run-notebook
@@ -66,9 +71,10 @@ runs:
         message: |
           Результат автоматической проверки задания:
             
-          Flake8: ${{ steps.build.flake8.conclusion == 'success' && '✔️' ||  '❌'  }}
-          PEP8: ${{ steps.build.run-notebook.conclusion == 'success' && '✔️' ||  '❌' }}
-          Jupyter Notebook Compile: ${{ steps.build.run-notebook.conclusion == 'success' && '✔️' ||  '❌'  }}
+          Flake8: ${{ steps.build.flake8.conclusion  }}
+          Black: ${{ steps.build.black.conclusion  }}
+          PEP8: ${{ steps.build.run-notebook.conclusion }}
+          Jupyter Notebook Compile: ${{ steps.build.run-notebook.conclusion  }}
 
           🌐 Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
 
