@@ -61,6 +61,9 @@ runs:
       uses: actions/deploy-pages@v2
 
     - uses: mshick/add-pr-comment@v2
+      if: success()
       with:
         message: |
-          Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}/${{ github.head_ref }}
+          PEP8: ✔️
+          Jupyter Notebook Compile: ✔️
+          Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
