@@ -19,11 +19,11 @@ runs:
 
     - uses: py-actions/py-dependency-install@v4
       with:
-        path: ${{ github.head_ref }}/hw_1/requirements.txt
+        path: ${{ github.head_ref }}/requirements.txt
     
     - uses: yaananth/run-notebook@v2
       with:
-        notebook: "${{ github.head_ref }}/hw_1/task.ipynb"
+        notebook: "${{ github.head_ref }}/task.ipynb"
         params: "PATHTOPARAMS.json"
         isReport: False
         poll: True
