@@ -16,6 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: verify-task
-        uses: @danilkladnitsky/auto-nlp-action
+        uses: danilkladnitsky/auto-nlp-action
         with:
             home-task-filename: task.ipynb
