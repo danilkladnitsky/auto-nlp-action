@@ -36,7 +36,7 @@ runs:
         GITHUB: ${{ toJson(github) }}
         SECRETS: "{}"
       with: 
-        notebook: "${{ github.head_ref }}/task.ipynb"
+        notebook: "${{ github.head_ref }}/${{ inputs.home-task-filename }}"
         isReport: False
         poll: True
 
