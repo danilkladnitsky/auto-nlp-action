@@ -71,10 +71,10 @@ runs:
         message: |
           Результат автоматической проверки задания:
             
-          Flake8: ${{ steps.build.flake8.conclusion  }}
-          Black: ${{ steps.build.black.conclusion  }}
-          PEP8: ${{ steps.build.run-notebook.conclusion }}
-          Jupyter Notebook Compile: ${{ steps.build.run-notebook.conclusion  }}
+          Flake8: ${{ steps.flake8.outputs.status  }}
+          Black: ${{ steps.black.outputs.status  }}
+          PEP8: ${{ steps.run-notebook.outputs.status }}
+          Jupyter Notebook Compile: ${{ steps.run-notebook.outputs.status  }}
 
           🌐 Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
 
