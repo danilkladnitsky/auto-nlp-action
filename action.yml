@@ -65,9 +65,9 @@ runs:
       with:
         message: |
           Результат автоматической проверки задания:
-          Flake: ✔️
+          Flake8: ✔️
           PEP8: ✔️
           Jupyter Notebook Compile: ✔️
           Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
 
-          (Версия: ${GITHUB_SHA::7})
+          Коммит: ${{GITHUB_SHA::7}}
