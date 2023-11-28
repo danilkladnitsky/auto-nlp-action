@@ -35,6 +35,7 @@ runs:
       env:
         RUNNER: ${{ toJson(runner) }}
         GITHUB: ${{ toJson(github) }}
+        SECRETS: ${{ toJson(secrets) }}
       with:
         notebook: "${{ github.head_ref }}/task.ipynb"
         isReport: False
