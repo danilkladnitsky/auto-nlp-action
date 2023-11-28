@@ -1,9 +1,18 @@
 name: Jupyter Notebook
 
-on: [workflow_dispatch]
+on: [pull_request, workflow_dispatch]
+
 
 jobs:
   check-home-task:
+    permissions:
+        pages: write
+        id-token: write
+        pull-requests: write
+    
+    environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

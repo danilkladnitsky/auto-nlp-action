@@ -5,30 +5,43 @@ inputs:
     description: 'Имя Jupyter-ноутбука, в котором хранится задание'
     required: true
     default: 'task.ipynb'
-
+branding:
+  icon: 'check-circle'
+  color: 'yellow'
 
 runs:
   using: 'composite'
 
   steps:
     - uses: actions/checkout@v3
+      id: checkout
       
     - uses: actions/setup-python@v3
+      id: setup-python
       with:
         python-version: '3.9.12'
 
     - uses: py-actions/py-dependency-install@v4
+      id: pip-install
       with:
         path: ${{ github.head_ref }}/requirements.txt
-    
+
+    - uses: mhitza/flake8-jupyter-notebook@v1
+      id: flake8
+
     - uses: yaananth/run-notebook@v2
-      with:
-        notebook: "${{ github.head_ref }}/task.ipynb"
-        params: "PATHTOPARAMS.json"
+      id: run-notebook
+      env:
+        RUNNER: ${{ toJson(runner) }}
+        GITHUB: ${{ toJson(github) }}
+        SECRETS: "{}"
+      with: 
+        notebook: "${{ github.head_ref }}/${{ inputs.home-task-filename }}"
         isReport: False
         poll: True
 
     - name: Tar files
+      id: tar-files
       shell: sh
       run: |
         cd ${{ RUNNER.temp }}/nb-runner/
@@ -37,12 +50,38 @@ runs:
         tar --dereference --hard-dereference -cvf artifact.tar ${{ github.head_ref }}/
     
     - uses: actions/upload-pages-artifact@v2
+      id: upload-artifact
       if: always()
       with:
         name: github-pages
         path: ${{ RUNNER.temp }}/nb-runner/
 
-    - name: Download artifact
-      uses: actions/download-artifact@v3
-      env:
-        RUNNER: ${{ toJson(runner) }}
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2
+
+    - uses: mshick/add-pr-comment@v2
+      if: always()
+      with:
+        message: |
+          Все проверки прошли успешно:
+            
+          Flake8: ${{ steps.flake8.outcome }}
+          PEP8: ${{ steps.run-notebook.outcome }}
+          Jupyter Notebook Compile: ${{ steps.run-notebook.outcome }}
+
+          🌐 Ссылка на домашнее задание для ментора: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
+
+          🆔 Коммит: ${{ github.sha }}
+
+        
+        message-failure: |
+          Код не прошел одну или несколько проверок. 
+          
+          Статус последней проверки:
+          Flake8: ${{ steps.flake8.outcome }}
+          PEP8: ${{ steps.run-notebook.outcome }}
+          Jupyter Notebook Compile: ${{ steps.run-notebook.outcome }}
+
+          🆔 Коммит: ${{ github.sha }}
+
