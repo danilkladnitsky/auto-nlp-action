@@ -1,6 +1,6 @@
 name: Jupyter Notebook
 
-on: [workflow_dispatch]
+on: [pull_request, workflow_dispatch]
 
 jobs:
   check-home-task:
