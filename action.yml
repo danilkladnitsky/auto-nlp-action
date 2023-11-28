@@ -65,8 +65,12 @@ runs:
       id: deployment
       uses: actions/deploy-pages@v2
 
+    - name: test
+      shell: sh
+      run: echo ${{ steps.flake8.outputs }}
+
     - uses: mshick/add-pr-comment@v2
-      if: success()
+      if: always()
       with:
         message: |
           Результат автоматической проверки задания:
