@@ -45,7 +45,7 @@ runs:
       id: tar-files
       shell: sh
       run: |
-        cd ${{ RUNNER.temp }}/${{ github.head_ref }}/nb-runner/
+        cd ${{ RUNNER.temp }}/nb-runner/
         mkdir ${{ github.head_ref }}
         mv task.html ${{ github.head_ref }}/index.html
         tar --dereference --hard-dereference -cvf artifact.tar ${{ github.head_ref }}/
