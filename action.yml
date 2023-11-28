@@ -23,15 +23,21 @@ runs:
       id: pip-install
       with:
         path: ${{ github.head_ref }}/requirements.txt
+
+    - name: check dir
+      shell: sh
+      run: |
+        cd ${{ github.head_ref }}
+        ls
     
     - uses: yaananth/run-notebook@v2
       id: run-notebook
       env:
         RUNNER: ${{ toJson(runner) }}
         GITHUB: ${{ toJson(github) }}
+        SECRETS: ${{ toJson(secrets) }}
       with:
         notebook: "${{ github.head_ref }}/task.ipynb"
-        params: "PATHTOPARAMS.json"
         isReport: False
         poll: True
 
