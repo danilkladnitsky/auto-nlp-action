@@ -70,7 +70,7 @@ runs:
         message: |
           Результат автоматической проверки задания:
             
-          Flake8: ${{ steps.flake8.outputs.outcome = 'success' && 'OK' || 'BAD' }}
+          Flake8: ${{ steps.flake8.outputs.outcome == 'success' && 'OK' || 'BAD' }}
           PEP8: ${{ steps.run-notebook.outputs.outcome }}
           Jupyter Notebook Compile: ${{ steps.run-notebook.outputs.outcome  }}
 
