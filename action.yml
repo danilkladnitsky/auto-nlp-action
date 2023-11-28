@@ -33,6 +33,7 @@ runs:
         poll: True
 
     - name: Tar files
+      shell: sh
       run: |
         cd ${{ RUNNER.temp }}/nb-runner/
         mkdir ${{ github.head_ref }}
@@ -44,7 +45,7 @@ runs:
       with:
         name: github-pages
         path: ${{ RUNNER.temp }}/nb-runner/
-        
+
     - name: Download artifact
       uses: actions/download-artifact@v3
       env:
