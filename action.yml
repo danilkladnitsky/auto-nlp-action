@@ -60,12 +60,8 @@ runs:
       id: deployment
       uses: actions/deploy-pages@v2
 
-    - name: test
-      shell: sh
-      run: echo ${{ steps.flake8.outcome }}
-
     - uses: mshick/add-pr-comment@v2
-      if: success()
+      if: always()
       with:
         message: |
         Все проверки прошли успешно:
@@ -78,14 +74,13 @@ runs:
 
         🆔 Коммит: ${{ github.sha }}
 
-    - uses: mshick/add-pr-comment@v2
-      if: failure()
-      with:
-        message: |
-        Статус последней проверки:
+        
+        message-failure: |
+          Статус последней проверки:
           
-        Flake8: ${{ steps.flake8.outcome }}
-        PEP8: ${{ steps.run-notebook.outcome }}
-        Jupyter Notebook Compile: ${{ steps.run-notebook.outcome }}
+          Flake8: ${{ steps.flake8.outcome }}
+          PEP8: ${{ steps.run-notebook.outcome }}
+          Jupyter Notebook Compile: ${{ steps.run-notebook.outcome }}
 
-        🆔 Коммит: ${{ github.sha }}
+          🆔 Коммит: ${{ github.sha }}
+
