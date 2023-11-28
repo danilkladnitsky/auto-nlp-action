@@ -5,6 +5,9 @@ inputs:
     description: 'Имя Jupyter-ноутбука, в котором хранится задание'
     required: true
     default: 'task.ipynb'
+branding:
+  icon: 'check-circle'
+  color: 'yellow'
 
 runs:
   using: 'composite'
@@ -25,8 +28,6 @@ runs:
 
     - uses: mhitza/flake8-jupyter-notebook@v1
       id: flake8
-      with:
-        path: ${{ github.head_ref }}
     
     - uses: yaananth/run-notebook@v2
       id: run-notebook
@@ -64,9 +65,9 @@ runs:
       with:
         message: |
           Результат автоматической проверки задания:
-          
+          Flake: ✔️
           PEP8: ✔️
           Jupyter Notebook Compile: ✔️
           Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
 
-          (Версия: ${{ steps.vars.outputs.sha_short }})
+          (Версия: ${GITHUB_SHA::7})
