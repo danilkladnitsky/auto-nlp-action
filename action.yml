@@ -12,16 +12,23 @@ runs:
 
   steps:
     - uses: actions/checkout@v3
+      id: checkout
       
     - uses: actions/setup-python@v3
+      id: setup-python
       with:
         python-version: '3.9.12'
 
     - uses: py-actions/py-dependency-install@v4
+      id: pip-install
       with:
         path: ${{ github.head_ref }}/requirements.txt
     
     - uses: yaananth/run-notebook@v2
+      id: run-notebook
+      env:
+        RUNNER: ${{ toJson(runner) }}
+        GITHUB: ${{ toJson(github) }}
       with:
         notebook: "${{ github.head_ref }}/task.ipynb"
         params: "PATHTOPARAMS.json"
@@ -29,20 +36,17 @@ runs:
         poll: True
 
     - name: Tar files
+      id: tar-files
       shell: sh
       run: |
-        cd ${{ RUNNER.temp }}/nb-runner/
+        cd ${{ RUNNER.temp }}/${{ github.head_ref }}/nb-runner/
         mkdir ${{ github.head_ref }}
         mv task.html ${{ github.head_ref }}/index.html
         tar --dereference --hard-dereference -cvf artifact.tar ${{ github.head_ref }}/
     
     - uses: actions/upload-pages-artifact@v2
+      id: upload-artifact
       if: always()
       with:
         name: github-pages
         path: ${{ RUNNER.temp }}/nb-runner/
-
-    - name: Download artifact
-      uses: actions/download-artifact@v3
-      env:
-        RUNNER: ${{ toJson(runner) }}
