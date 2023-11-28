@@ -1,4 +1,3 @@
-# action.yml
 name: 'Auto NLP Action'
 description: 'Линтинг, запуск и загрузка ноутбука на Github Pages'
 inputs:
@@ -6,11 +5,47 @@ inputs:
     description: 'Имя Jupyter-ноутбука, в котором хранится задание'
     required: true
     default: 'task.ipynb'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+
+
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.who-to-greet }}
+  using: 'composite'
+
+  steps:
+    - uses: actions/checkout@v3
+      
+    - uses: actions/setup-python@v3
+      with:
+        python-version: '3.9.12'
+
+    - uses: py-actions/py-dependency-install@v4
+      with:
+        path: ${{ github.head_ref }}/requirements.txt
+    
+    - uses: yaananth/run-notebook@v2
+      env:
+        RUNNER: ${{ toJson(runner) }}
+        SECRETS: ${{ toJson(secrets) }}
+        GITHUB: ${{ toJson(github) }}
+      with:
+        notebook: "${{ github.head_ref }}/task.ipynb"
+        params: "PATHTOPARAMS.json"
+        isReport: False
+        poll: True
+
+    - name: Tar files
+      run: |
+        cd ${{ RUNNER.temp }}/nb-runner/
+        mkdir ${{ github.head_ref }}
+        mv task.html ${{ github.head_ref }}/index.html
+        tar --dereference --hard-dereference -cvf artifact.tar ${{ github.head_ref }}/
+    
+    - uses: actions/upload-pages-artifact@v2
+      if: always()
+      with:
+        name: github-pages
+        path: ${{ RUNNER.temp }}/nb-runner/
+        
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      env:
+        RUNNER: ${{ toJson(runner) }}
