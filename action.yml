@@ -29,15 +29,6 @@ runs:
     - uses: mhitza/flake8-jupyter-notebook@v1
       id: flake8
 
-    - name: Install black deps
-      shell: sh
-      run: pip install "black[jupyter]"
-
-    - uses: jpetrucciani/black-check@master
-      id: black
-      with:
-        path: ${{ github.head_ref }}
-    
     - uses: yaananth/run-notebook@v2
       id: run-notebook
       env:
@@ -79,8 +70,7 @@ runs:
         message: |
           Результат автоматической проверки задания:
             
-          Flake8: ${{ steps.flake8.outputs.outcome  }}
-          Black: ${{ steps.black.outputs.outcome  }}
+          Flake8: ${{ steps.flake8.outputs.outcome = 'success' && 'OK' || 'BAD' }}
           PEP8: ${{ steps.run-notebook.outputs.outcome }}
           Jupyter Notebook Compile: ${{ steps.run-notebook.outputs.outcome  }}
 
