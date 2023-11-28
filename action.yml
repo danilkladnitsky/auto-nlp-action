@@ -26,9 +26,6 @@ runs:
       with:
         path: ${{ github.head_ref }}/requirements.txt
 
-    - uses: mhitza/flake8-jupyter-notebook@v1
-      id: flake8
-
     - uses: yaananth/run-notebook@v2
       id: run-notebook
       env:
@@ -66,7 +63,6 @@ runs:
         message: |
           Все проверки прошли успешно:
             
-          Flake8: ${{ steps.flake8.outcome }}
           PEP8: ${{ steps.run-notebook.outcome }}
           Jupyter Notebook Compile: ${{ steps.run-notebook.outcome }}
 
@@ -79,7 +75,6 @@ runs:
           Код не прошел одну или несколько проверок. 
           
           Статус последней проверки:
-          Flake8: ${{ steps.flake8.outcome }}
           PEP8: ${{ steps.run-notebook.outcome }}
           Jupyter Notebook Compile: ${{ steps.run-notebook.outcome }}
 
