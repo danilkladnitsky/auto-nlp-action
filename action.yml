@@ -63,6 +63,4 @@ runs:
     - uses: mshick/add-pr-comment@v2
       with:
         message: |
-          **Hello**
-          🌏
-          !
+          Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}/${{ github.head_ref }}
