@@ -22,10 +22,6 @@ runs:
         path: ${{ github.head_ref }}/requirements.txt
     
     - uses: yaananth/run-notebook@v2
-      env:
-        RUNNER: ${{ toJson(runner) }}
-        SECRETS: ${{ toJson(secrets) }}
-        GITHUB: ${{ toJson(github) }}
       with:
         notebook: "${{ github.head_ref }}/task.ipynb"
         params: "PATHTOPARAMS.json"
