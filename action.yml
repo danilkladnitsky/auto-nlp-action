@@ -66,9 +66,9 @@ runs:
         message: |
           Результат автоматической проверки задания:
             
-          Flake8: ${{ steps.build.flake8 == success && ✔️ ||  ❌  }}
-          PEP8: ${{ steps.build.run-notebook == success && ✔️ ||  ❌ }}
-          Jupyter Notebook Compile: ${{ steps.build.run-notebook == success && ✔️ ||  ❌  }}
+          Flake8: ${{ steps.build.flake8 == 'success' && '✔️' ||  '❌'  }}
+          PEP8: ${{ steps.build.run-notebook == 'success' && '✔️' ||  '❌' }}
+          Jupyter Notebook Compile: ${{ steps.build.run-notebook == 'success' && '✔️' ||  '❌'  }}
 
           🌐 Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
 
