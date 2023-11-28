@@ -6,9 +6,6 @@ inputs:
     required: true
     default: 'task.ipynb'
 
-
-
-
 runs:
   using: 'composite'
 
