@@ -2,6 +2,10 @@ name: Jupyter Notebook
 
 on: [pull_request, workflow_dispatch]
 
+permissions:
+    pages: write
+    id-token: write
+
 jobs:
   check-home-task:
     runs-on: ubuntu-latest
