@@ -56,3 +56,7 @@ runs:
       with:
         name: github-pages
         path: ${{ RUNNER.temp }}/nb-runner/
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2
