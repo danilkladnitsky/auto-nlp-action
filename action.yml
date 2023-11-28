@@ -23,11 +23,10 @@ runs:
       with:
         path: ${{ github.head_ref }}/requirements.txt
 
-    - name: check dir
-      shell: sh
-      run: |
-        cd ${{ github.head_ref }}
-        ls
+    - uses: mhitza/flake8-jupyter-notebook@v1
+      id: flake8
+      with:
+        path: ${{ github.head_ref }}
     
     - uses: yaananth/run-notebook@v2
       id: run-notebook
@@ -64,6 +63,10 @@ runs:
       if: success()
       with:
         message: |
+          Результат автоматической проверки задания:
+          
           PEP8: ✔️
           Jupyter Notebook Compile: ✔️
           Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
+
+          (Версия: ${{ steps.vars.outputs.sha_short }})
