@@ -1,0 +1,58 @@
+name: Check Jupyter Notebook
+
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  lint-and-execute-notebook:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      with:
+        python-version: '3.9.12' 
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9.12' 
+    - name: Install Python dependencies
+      uses: py-actions/py-dependency-install@v4
+      with:
+        path: ${{ github.head_ref }}/requirements.txt
+    - uses: yaananth/run-notebook@v2
+      env:
+        RUNNER: ${{ toJson(runner) }}
+        SECRETS: ${{ toJson(secrets) }}
+        GITHUB: ${{ toJson(github) }}
+      with:
+        notebook: "${{ github.head_ref }}/task.ipynb"
+        params: "PATHTOPARAMS.json"
+        isReport: False
+        poll: True
+    - name: Tar files
+      run: |
+        cd ${{ RUNNER.temp }}/nb-runner/
+        mkdir ${{ github.head_ref }}
+        mv task.html ${{ github.head_ref }}/index.html
+        tar --dereference --hard-dereference -cvf artifact.tar ${{ github.head_ref }}/
+    - uses: actions/upload-pages-artifact@v2
+      if: always()
+      with:
+        name: github-pages
+        path: ${{ RUNNER.temp }}/nb-runner/
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      env:
+        RUNNER: ${{ toJson(runner) }}
+
+  deploy-notebook:
+    needs: lint-and-execute-notebook
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

@@ -1,0 +1,16 @@
+# action.yml
+name: 'Auto NLP Action'
+description: 'Линтинг, запуск и загрузка ноутбука на Github Pages'
+inputs:
+  home-task-filename:
+    description: 'Имя Jupyter-ноутбука, в котором хранится задание'
+    required: true
+    default: 'task.ipynb'
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.who-to-greet }}
