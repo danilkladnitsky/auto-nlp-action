@@ -70,4 +70,4 @@ runs:
           Jupyter Notebook Compile: ✔️
           Ссылка на домашнее задание: ${{ steps.deployment.outputs.page_url }}${{ github.head_ref }}
 
-          Коммит: ${{GITHUB_SHA::7}}
+          Коммит: ${{ github.sha }}
