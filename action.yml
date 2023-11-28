@@ -64,7 +64,7 @@ runs:
       if: always()
       with:
         message: |
-          🎉 Все проверки прошли успешно!🎉
+          Все проверки прошли успешно 🎉:
             
           Flake8: ${{ steps.flake8.outcome }}
           PEP8: ${{ steps.run-notebook.outcome }}
