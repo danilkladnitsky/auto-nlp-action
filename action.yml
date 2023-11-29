@@ -43,7 +43,7 @@ runs:
       run: |
         cd ${{ RUNNER.temp }}/nb-runner/
         mkdir ${{ github.head_ref }}
-        mv task.html ${{ github.head_ref }}/index.html
+        mv *.html ${{ github.head_ref }}/index.html
         tar --dereference --hard-dereference -cvf artifact.tar ${{ github.head_ref }}/
     
     - uses: actions/upload-pages-artifact@v2
