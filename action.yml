@@ -58,7 +58,7 @@ runs:
       uses: actions/deploy-pages@v2
 
     - uses: mshick/add-pr-comment@v2
-      if: always()
+      if: success()
       with:
         message: |
           Все проверки прошли успешно:
@@ -70,8 +70,10 @@ runs:
 
           🆔 Коммит: ${{ github.sha }}
 
-        
-        message-failure: |
+    - uses: mshick/add-pr-comment@v2
+      if: failure()
+      with:
+        message: |
           Код не прошел одну или несколько проверок. 
           
           Статус последней проверки:
@@ -79,4 +81,3 @@ runs:
           Jupyter Notebook Compile: ${{ steps.run-notebook.outcome }}
 
           🆔 Коммит: ${{ github.sha }}
-
